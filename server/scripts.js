@@ -85,14 +85,16 @@ if redis.call('HEXISTS', stateKey, 'initialized') == 0 then
 end
 
 local drawingRaw = redis.call('GET', drawingKey)
-if drawingRaw then
-  local drawing = cjson.decode(drawingRaw)
-  if drawing.token ~= ARGV[1] then
-    return {'ERR', 'DRAW_TOKEN_MISMATCH'}
-  end
-  redis.call('DEL', drawingKey)
-  redis.call('HINCRBY', stateKey, 'version', 1)
+if not drawingRaw then
+  return {'ERR', 'DRAW_TOKEN_MISMATCH'}
 end
+
+local drawing = cjson.decode(drawingRaw)
+if drawing.token ~= ARGV[1] then
+  return {'ERR', 'DRAW_TOKEN_MISMATCH'}
+end
+redis.call('DEL', drawingKey)
+redis.call('HINCRBY', stateKey, 'version', 1)
 
 local remaining = redis.call('LLEN', deckKey)
 local remainingWins = tonumber(redis.call('HGET', stateKey, 'remaining_wins') or '0')
