@@ -62,4 +62,4 @@ All state-changing operations use one Redis `EVAL` script per operation. Redis e
 - Node unit tests for Redis config, service result mapping, HTTP validation, and frontend API wiring.
 - Contract tests assert that draw/add/confirm use atomic Lua scripts and that Supabase references are absent.
 - Syntax checks for all frontend and API JavaScript.
-- Clean deployment ZIP must contain root `index.html`, `vercel.json`, `package.json`, `api/`, `public/`, `tests/`, and docs; no `.git`, no `supabase/`, and no nested `mnt/data` path.
+- Clean deployment ZIP must contain `public/index.html`, root `vercel.json`, `package.json`, `api/`, `public/`, `tests/`, and docs; no `.git`, no `supabase/`, and no nested `mnt/data` path.

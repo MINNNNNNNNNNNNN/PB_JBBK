@@ -14,17 +14,17 @@
 ## GitHub 루트 구조
 
 ```text
-index.html
 package.json
 vercel.json
 api/
 public/
+  index.html
 server/
 tests/
 docs/
 ```
 
-ZIP 자체를 GitHub에 올리는 것이 아니라, ZIP을 푼 뒤 위 내용물이 저장소 최상단에 보여야 합니다.
+ZIP 자체를 GitHub에 올리는 것이 아니라, ZIP을 푼 뒤 위 내용물이 저장소 최상단에 보여야 합니다. Vercel은 `public/`을 정적 출력 디렉터리로 사용하고 `public/index.html`을 `/`에서 제공합니다.
 
 ## Vercel 배포
 
