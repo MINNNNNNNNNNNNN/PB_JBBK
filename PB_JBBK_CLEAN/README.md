@@ -70,3 +70,4 @@ Node.js 20+에서 추가 패키지 없이 실행됩니다.
 ```bash
 node --test tests/*.test.mjs
 ```
+Deployment trigger
