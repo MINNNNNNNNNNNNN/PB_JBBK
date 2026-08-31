@@ -101,6 +101,7 @@ async function startDraw() {
   }
 
   localDraw = payload;
+  busy = false;
   applyRoomState({
     remaining_count: payload.remaining_count,
     remaining_wins: payload.remaining_wins,

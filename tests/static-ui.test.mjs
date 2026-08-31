@@ -29,3 +29,9 @@ test('app uses Vercel API client for draw, confirm, add, and polling with no Sup
   for (const token of ['api.draw', 'api.confirm', 'api.add', 'startPolling']) assert.match(app, new RegExp(token.replace('.', '\\.')));
   assert.doesNotMatch(all, /supabase/i);
 });
+
+test('successful draw releases the busy guard before confirmation', async () => {
+  const app = await readFile(new URL('../public/app.mjs', import.meta.url), 'utf8');
+  const successPath = app.slice(app.indexOf('localDraw = payload'), app.indexOf('function revealResult'));
+  assert.match(successPath, /busy\s*=\s*false/);
+});
