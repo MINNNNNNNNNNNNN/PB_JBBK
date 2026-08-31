@@ -147,20 +147,23 @@ async function confirmDraw() {
   if (!localDraw || busy) return;
   busy = true;
   dom.confirm.disabled = true;
+  dom.shell.classList.add('confirming');
+  dom.confirm.classList.remove('show');
+  const exitDelay = wait(prefersReducedMotion ? 0 : CONFIRM_EXIT_MS);
   let data;
   try {
     data = await api.confirm(localDraw.draw_token);
   } catch (error) {
     showToast(`확인 실패: ${error?.message || '연결 오류'}`);
+    dom.shell.classList.remove('confirming');
+    dom.confirm.classList.add('show');
     busy = false;
     dom.confirm.disabled = false;
     return;
   }
 
   localDraw = null;
-  dom.shell.classList.add('confirming');
-  dom.confirm.classList.remove('show');
-  await wait(prefersReducedMotion ? 0 : CONFIRM_EXIT_MS);
+  await exitDelay;
   resetVisualState();
   if (data) applyRoomState(data);
   try {

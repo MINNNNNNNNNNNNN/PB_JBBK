@@ -33,16 +33,23 @@ test('confirmation dismisses the revealed result before restoring the draw contr
 
   const confirmPath = app.slice(app.indexOf('async function confirmDraw'), app.indexOf('function openSettings'));
   assert.match(confirmPath, /classList\.add\(['"]confirming['"]\)/);
+  assert.ok(confirmPath.indexOf("classList.add('confirming')") < confirmPath.indexOf('api.confirm'));
+  assert.ok(confirmPath.indexOf("classList.remove('show')") < confirmPath.indexOf('api.confirm'));
   assert.ok(confirmPath.indexOf('classList.add(\'confirming\')') < confirmPath.indexOf('resetVisualState()'));
-  const exitPath = confirmPath.slice(confirmPath.indexOf('await wait('));
+  const exitPath = confirmPath.slice(confirmPath.indexOf('await exitDelay'));
   assert.ok(exitPath.indexOf('await refreshRoom()') > 0);
   assert.ok(exitPath.indexOf('busy = false') > exitPath.indexOf('await refreshRoom()'));
+});
+
+test('confirmation button exits faster than the result motion', async () => {
+  const css = await readFile(new URL('../public/styles.css', import.meta.url), 'utf8');
+  assert.match(css, /\.app-shell\.confirming\s+\.confirm-button\s*\{[^}]*transition-duration:\s*\.15s/);
 });
 
 test('reduced-motion users do not wait through the visual confirmation delay', async () => {
   const app = await readFile(new URL('../public/app.mjs', import.meta.url), 'utf8');
   assert.match(app, /matchMedia\?\.\(['"]\(prefers-reduced-motion:\s*reduce\)['"]\)/);
-  assert.match(app, /await\s+wait\(prefersReducedMotion\s*\?\s*0\s*:\s*CONFIRM_EXIT_MS\)/);
+  assert.match(app, /exitDelay\s*=\s*wait\(prefersReducedMotion\s*\?\s*0\s*:\s*CONFIRM_EXIT_MS\)/);
 });
 
 test('footer logos retain the larger presentation sizes', async () => {
