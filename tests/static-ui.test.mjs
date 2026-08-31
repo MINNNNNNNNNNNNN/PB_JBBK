@@ -37,6 +37,7 @@ test('confirmation dismisses the revealed result before restoring the draw contr
   assert.ok(confirmPath.indexOf("classList.remove('show')") < confirmPath.indexOf('api.confirm'));
   assert.ok(confirmPath.indexOf('classList.add(\'confirming\')') < confirmPath.indexOf('resetVisualState()'));
   const exitPath = confirmPath.slice(confirmPath.indexOf('await exitDelay'));
+  assert.ok(exitPath.indexOf('dom.confirm.disabled = false') < exitPath.indexOf('resetVisualState()'));
   assert.ok(exitPath.indexOf('await refreshRoom()') > 0);
   assert.ok(exitPath.indexOf('busy = false') > exitPath.indexOf('await refreshRoom()'));
 });

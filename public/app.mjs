@@ -164,6 +164,7 @@ async function confirmDraw() {
 
   localDraw = null;
   await exitDelay;
+  dom.confirm.disabled = false;
   resetVisualState();
   if (data) applyRoomState(data);
   try {
@@ -172,7 +173,6 @@ async function confirmDraw() {
     // refreshRoom already renders a disconnected state; keep the confirmed count as fallback.
   }
   busy = false;
-  dom.confirm.disabled = false;
   renderControls();
 }
 
