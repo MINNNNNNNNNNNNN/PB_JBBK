@@ -43,7 +43,10 @@ test('confirmation dismisses the revealed result before restoring the draw contr
 
 test('confirmation button exits faster than the result motion', async () => {
   const css = await readFile(new URL('../public/styles.css', import.meta.url), 'utf8');
-  assert.match(css, /\.app-shell\.confirming\s+\.confirm-button\s*\{[^}]*transition-duration:\s*\.15s/);
+  const confirmingButton = css.match(/\.app-shell\.confirming\s+\.confirm-button\s*\{([^}]*)\}/)?.[1] ?? '';
+  assert.match(confirmingButton, /opacity:\s*0/);
+  assert.match(confirmingButton, /pointer-events:\s*none/);
+  assert.match(confirmingButton, /transition-duration:\s*\.15s/);
 });
 
 test('reduced-motion users do not wait through the visual confirmation delay', async () => {

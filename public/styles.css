@@ -55,7 +55,7 @@ body { display: flex; justify-content: center; }
 .primary-button:disabled { opacity: .42; }
 .confirm-button { position: absolute; inset: 0; opacity: 0; transform: translateY(8px); pointer-events: none; transition: opacity .42s ease, transform .42s ease; }
 .confirm-button.show { opacity: 1; transform: translateY(0); pointer-events: auto; }
-.app-shell.confirming .confirm-button { transition-duration: .15s; }
+.app-shell.confirming .confirm-button { opacity: 0; pointer-events: none; transition-duration: .15s; }
 .draw-hidden { opacity: 0; transform: translateY(8px); pointer-events: none; }
 .app-shell.confirming #drawBtn { opacity: 0; transform: translateY(8px); }
 .sheet-backdrop { position: absolute; inset: 0; z-index: 10; display: flex; align-items: flex-end; background: rgba(16,15,12,.25); opacity: 0; pointer-events: none; transition: opacity .2s ease; }
