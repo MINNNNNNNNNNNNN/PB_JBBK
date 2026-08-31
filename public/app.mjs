@@ -4,6 +4,10 @@ import { createLotteryApiClient } from './api-client.mjs';
 const POLL_INTERVAL_MS = 1000;
 const DRAW_REVEAL_MS = 1750;
 const CONFIRM_FADE_DELAY_MS = 450;
+const CONFIRM_EXIT_MS = 420;
+
+const wait = (duration) => new Promise((resolve) => window.setTimeout(resolve, duration));
+const prefersReducedMotion = window.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches ?? false;
 
 const dom = {
   shell: document.getElementById('appShell'),
@@ -68,7 +72,7 @@ function renderControls() {
 }
 
 function resetVisualState() {
-  dom.shell.classList.remove('drawing', 'revealed', 'winner');
+  dom.shell.classList.remove('drawing', 'revealed', 'winner', 'confirming');
   dom.ticket.classList.add('hidden-ticket');
   dom.ticket.setAttribute('aria-hidden', 'true');
   dom.ticketText.textContent = '?';
@@ -154,12 +158,19 @@ async function confirmDraw() {
   }
 
   localDraw = null;
+  dom.shell.classList.add('confirming');
+  dom.confirm.classList.remove('show');
+  await wait(prefersReducedMotion ? 0 : CONFIRM_EXIT_MS);
+  resetVisualState();
+  if (data) applyRoomState(data);
+  try {
+    await refreshRoom();
+  } catch {
+    // refreshRoom already renders a disconnected state; keep the confirmed count as fallback.
+  }
   busy = false;
   dom.confirm.disabled = false;
-  resetVisualState();
-  const payload = data;
-  if (payload) applyRoomState(payload);
-  else await refreshRoom();
+  renderControls();
 }
 
 function openSettings() {
